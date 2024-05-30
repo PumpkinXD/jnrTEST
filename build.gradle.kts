@@ -3,14 +3,14 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
-//    id("org.tboox.gradle-xmake-plugin") version "1.1.5" //it's for android NDK
+//    id("org.tboox.gradle-xmake-plugin") version "1.1.5" //https://github.com/xmake-io/xmake-gradle/issues/11 (zh_hans)
 }
 
 group = "io.github.pumpkinxd.examples"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    maven("https://maven.aliyun.com/repository/public/")
+    maven("https://maven.aliyun.com/repository/public/")//Ali mirror
     mavenCentral()
 }
 val shadowImpl: Configuration by configurations.creating {
@@ -39,7 +39,6 @@ tasks.register("buildNative") {
 
 
 tasks.jar {
-//    println("hello from jar ")
     dependsOn("buildNative")
     archiveBaseName.set("NOshadow")
     archiveClassifier.set("")
@@ -51,8 +50,6 @@ tasks.jar {
 
 tasks.shadowJar {
     enabled = true
-//    dependsOn("jar")
-//    println("hello from shadow")
     dependsOn("buildNative")
     configurations = listOf(shadowImpl)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
